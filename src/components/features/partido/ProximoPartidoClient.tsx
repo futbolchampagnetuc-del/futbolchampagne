@@ -22,10 +22,10 @@ export function ProximoPartidoClient({
     setLoading(true);
     try {
       if (asistencia === true) {
-        await cancelarAsistencia(partidoId);
+        await cancelarAsistencia(partidoId, jugadorId);
         setAsistencia(false);
       } else {
-        await confirmarAsistencia(partidoId);
+        await confirmarAsistencia(partidoId, jugadorId, "asisto");
         setAsistencia(true);
       }
     } catch (error) {
