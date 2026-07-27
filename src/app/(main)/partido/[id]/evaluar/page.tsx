@@ -1,6 +1,7 @@
-import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { EvaluacionForm } from "@/components/features/evaluacion/EvaluacionForm";
+import { EvaluacionSelectorClient } from "@/components/features/evaluacion/EvaluacionSelectorClient";
 
 export const dynamic = "force-dynamic";
 
@@ -11,10 +12,8 @@ export default async function EvaluarPage({
 }) {
   const { id } = await params;
   const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
 
-  // Verificar que el partido exista y esté finalizado
+  // Verificar que el partido exista
   const { data: partidosList } = await supabase
     .from("partidos")
     .select("*, cancha:canchas(*)")
@@ -30,67 +29,69 @@ export default async function EvaluarPage({
     : null;
 
   if (!partido) notFound();
-  if (partido.estado !== "finalizado") {
-    redirect(`/partido/${id}`);
-  }
 
-  // Jugadores confirmados que jugaron (excluyendo al usuario)
+  // Jugadores confirmados que jugaron
   const { data: asistenciasRaw } = await supabase
     .from("asistencia")
     .select("*, jugador:jugadores(*)")
     .eq("partido_id", id)
-    .eq("confirmado", true);
+    .eq("estado", "asisto");
 
   const asistencias = (asistenciasRaw || []) as unknown as {
     jugador_id: string;
     jugador: { id: string; nombre_completo: string; foto_url: string | null };
   }[];
 
-  const jugadoresAVotar = asistencias
-    .filter((a) => a.jugador_id !== user.id)
-    .map((a) => a.jugador);
+  const jugadoresAVotar = asistencias.map((a) => a.jugador);
 
-  // Evaluaciones existentes del usuario
+  // Obtener todos los votos existentes de este partido, para pasarlos al cliente
+  // y que el EvaluacionSelectorClient pueda filtrar dependiendo de qué evaluador se elija
   const { data: votosExistentesRaw } = await supabase
     .from("evaluaciones")
-    .select("*")
-    .eq("partido_id", id)
-    .eq("evaluador_id", user.id);
+    .select("evaluador_id, evaluado_id, estrellas, comentario")
+    .eq("partido_id", id);
 
   const votosExistentes = (votosExistentesRaw || []) as unknown as {
+    evaluador_id: string;
     evaluado_id: string;
     estrellas: number;
     comentario: string | null;
   }[];
 
-  const votosMap = new Map(
-    votosExistentes.map((v) => [v.evaluado_id, { estrellas: v.estrellas, comentario: v.comentario }])
-  );
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 animate-fade-in pb-24">
+      <Link href={`/partido/${id}`} className="inline-flex items-center gap-1.5 text-sm font-medium text-[#6b7280] hover:text-[#1a1a2e] transition-colors">
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Volver al partido
+      </Link>
+
       <div>
-        <h1 className="text-xl font-bold text-gray-900">
-          ⭐ Evaluar Compañeros
+        <h1 className="text-xl font-extrabold tracking-tight text-[#1a1a2e]">
+          Evaluar Jugadores
         </h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-[#6b7280]">
           {partido.cancha?.nombre} —{" "}
           {new Date(partido.fecha_hora).toLocaleDateString("es-AR")}
         </p>
       </div>
 
       {jugadoresAVotar.length === 0 ? (
-        <div className="flex flex-col items-center py-12 text-gray-400">
-          <p className="text-lg">No hay jugadores para evaluar</p>
-          <p className="mt-1 text-sm">
+        <div className="card-premium flex flex-col items-center py-16">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#d4af37]/10">
+            <span className="text-2xl">👥</span>
+          </div>
+          <p className="text-lg font-semibold text-[#1a1a2e]">No hay jugadores para evaluar</p>
+          <p className="mt-1 text-sm text-[#6b7280]">
             Los jugadores confirmados aparecerán acá
           </p>
         </div>
       ) : (
-        <EvaluacionForm
+        <EvaluacionSelectorClient
           partidoId={id}
-          jugadores={jugadoresAVotar}
-          votosExistentes={votosMap}
+          jugadoresAVotar={jugadoresAVotar}
+          votosExistentes={votosExistentes}
         />
       )}
     </div>

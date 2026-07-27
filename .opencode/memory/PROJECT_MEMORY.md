@@ -1,36 +1,55 @@
-# PROJECT_MEMORY — FutbolChampagne
+# PROJECT MEMORY
 
-## Sesión: 2026-07-22 — Bootstrap Inicial (COMPLETADO)
+## Sesión: Inicial — Build, Rediseño + Features (24/07/2026)
 
 ### Resumen
-Se bootstraped el proyecto completo desde cero: Next.js + TypeScript + Tailwind + Supabase.
-El build compila exitosamente. Pendiente de configuración de Supabase en Dashboard.
+Sesión completa de bootstrap del proyecto FutbolChampagne (Next.js 15 + Supabase + TypeScript). Se corrigieron errores de compilación, se rediseñó toda la UI con tema champagne premium, se cargaron datos reales del primer partido (28/07/2026, cancha El Último Diez) y se crearon las features de CRUD de jugadores e historial de partidos.
 
-### Archivos creados
-- **Config**: `package.json`, `tsconfig.json`, `next.config.ts`, `postcss.config.mjs`, `.env.example`, `.gitignore`
-- **Estilos**: `src/app/globals.css` (Tailwind v4 con tema verde)
-- **Supabase**: 
-  - `src/lib/supabase/client.ts`, `server.ts`, `admin.ts`, `middleware.ts`
-  - `src/middleware.ts` (protección de rutas)
-  - `supabase/migrations/001_initial_schema.sql` (7 tablas + RLS + triggers)
-  - `supabase/seed.sql`
-- **Auth**: `src/app/login/page.tsx` (Google OAuth), `auth/callback/route.ts`, `auth/signout/route.ts`
-- **Layout**: Bottom Nav con 5 tabs (Inicio, Jugadores, Sorteo, Ranking, Perfil)
-- **Páginas**: Home, Jugadores (lista+detalle), Sorteo, Ranking, Perfil, Partido detalle, Evaluar
-- **Componentes**: StarRating, AvatarWithName, PartidoGolesClient, ProximoPartidoClient, SorteoClient, PerfilForm, EvaluacionForm
-- **Actions**: asistencia, perfil, evaluacion, sorteo
-- **PWA**: manifest.json, service worker
-- **Docs**: ADR-001, SUPABASE-SETUP.md, DATABASE_NOTES.md
+### Archivos modificados/creados
+| Archivo | Acción | Propósito |
+|---|---|---|
+| `src/app/globals.css` | Modificado | Tema champagne premium completo |
+| `src/app/layout.tsx` | Modificado | Inter font + metadata premium |
+| `src/app/(main)/layout.tsx` | Modificado | Glassmorphism bottom nav |
+| `src/app/(main)/page.tsx` | Modificado | Home con próximo partido + historial/sorteo links |
+| `src/app/login/page.tsx` | Modificado | Login premium con gradientes |
+| `src/components/layout/BottomNav.tsx` | Modificado | Nav con Partidos reemplazando Sorteo |
+| `src/components/features/partido/ProximoPartidoClient.tsx` | Modificado | Asistencia premium |
+| `src/app/(main)/jugadores/page.tsx` | Modificado | Lista con fotos y características |
+| `src/app/(main)/jugadores/[id]/page.tsx` | Modificado | Detalle premium |
+| `src/app/(main)/perfil/page.tsx` | Modificado | Stats + form premium |
+| `src/app/(main)/sorteo/page.tsx` | Modificado | A/B equipos oro/esmeralda |
+| `src/app/(main)/ranking/page.tsx` | Modificado | Podiums oro |
+| `src/app/(main)/partido/[id]/page.tsx` | Modificado | VS display premium |
+| `src/app/(main)/partido/[id]/evaluar/page.tsx` | Modificado | Evaluación premium |
+| `src/app/error.tsx` | Modificado | Premium error page |
+| `src/app/not-found.tsx` | Modificado | Premium 404 |
+| `src/app/api/auth/callback/route.ts` | Modificado | Fix cookiesToSet `any` |
+| `src/app/api/auth/signout/route.ts` | Modificado | Fix cookiesToSet `any` |
+| `src/app/api/dev-login/route.ts` | Modificado | Fix session type |
+| `next.config.ts` | Modificado | outputFileTracingRoot + Supabase exclusion |
+| `tsconfig.json` | Modificado | Excluir `supabase/` del build |
+| `public/icons/icon-192x192.svg` | Creado | PWA icon |
+| `public/icons/icon-512x512.svg` | Creado | PWA icon |
+| `public/manifest.json` | Modificado | Theme color champagne |
+| `supabase/seed.sql` | Modificado | Datos reales: cancha, partido, 10 jugadores, asistencias |
+| `supabase/migrations/001_initial_schema.sql` | Modificado | RPC function refresh_rankings |
+| `supabase/functions/calcular-ranking/index.ts` | Creado | Edge Function ranking |
+| `supabase/functions/calcular-ranking/deno.json` | Creado | Deno config |
+| `src/actions/jugadores.actions.ts` | Creado | Server actions CRUD jugadores |
+| `src/app/(main)/admin/jugadores/page.tsx` | Creado | Admin page jugadores |
+| `src/app/(main)/admin/jugadores/AdminJugadoresClient.tsx` | Creado | Client component CRUD |
+| `src/app/(main)/partidos/page.tsx` | Creado | Historial de partidos |
 
-### Estado del build
-✅ Compilación exitosa (TypeScript + Next.js)
-⚠️ Requiere `.env.local` con credenciales de Supabase para funcionar
+### Decisiones clave
+1. **Tema champagne premium**: Se eligió `#d4af37` (oro) + `#faf8f5` (crema) + acentos `#0d9488` (esmeralda) para diferenciarse de apps de fútbol genéricas.
+2. **Seed con UUIDs fijos**: Se usaron IDs `f0000000-...` para desarrollo porque los jugadores reales se registrarán con Google OAuth y obtendrán sus propios IDs.
+3. **CRUD en `/admin/jugadores`**: Página separada del perfil para mantener la separación de concerns. Solo accesible para usuarios autenticados.
+4. **Sorteo reemplazado por Partidos en BottomNav**: El sorteo sigue accesible desde la home y desde la página de partido. Partidos es más navegado.
+5. **Edge Function en Deno**: `calcular-ranking` usa `deno.land/std` porque las Edge Functions de Supabase corren en Deno, no en Node. El build de Next.js excluye `supabase/` para evitar conflictos.
 
-### Pendiente (usuario)
-1. Crear proyecto en Supabase Dashboard
-2. Configurar Google OAuth (Google Cloud Console + Supabase)
-3. Copiar `.env.example` a `.env.local` y completar credenciales
-4. Ejecutar migración SQL (desde Supabase SQL Editor o CLI)
-5. Opcional: subir seed data
-6. `npm run dev` para ver la app funcionando
-7. Desplegar en Vercel
+### Estado actual
+- **Build**: ✅ 0 errores, 15 rutas
+- **Seed data**: Listo para aplicar con `supabase db reset`
+- **Features completadas**: Home, Jugadores (lista + detalle + admin CRUD), Partidos (historial + detalle), Sorteo, Ranking, Perfil, Evaluación
+- **Pendientes**: Login con Google OAuth en producción, deploy a Vercel + Supabase, foto upload funcional (requiere bucket storage configurado), Edge Function deploy

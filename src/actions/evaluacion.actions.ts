@@ -5,15 +5,14 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function votarJugador(
   partidoId: string,
+  evaluadorId: string,
   evaluadoId: string,
   estrellas: number,
   comentario?: string
 ) {
   const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("No autenticado");
 
-  if (user.id === evaluadoId) {
+  if (evaluadorId === evaluadoId) {
     throw new Error("No puedes votarte a ti mismo");
   }
   if (estrellas < 0 || estrellas > 5) {
@@ -39,7 +38,7 @@ export async function votarJugador(
     .from("evaluaciones")
     .upsert({
       partido_id: partidoId,
-      evaluador_id: user.id,
+      evaluador_id: evaluadorId,
       evaluado_id: evaluadoId,
       estrellas,
       comentario: comentario || null,
@@ -50,16 +49,14 @@ export async function votarJugador(
   revalidatePath(`/partido/${partidoId}/evaluar`);
 }
 
-export async function getEvaluaciones(partidoId: string) {
+export async function getEvaluaciones(partidoId: string, evaluadorId: string) {
   const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return [];
 
   const { data } = await supabase
     .from("evaluaciones")
     .select("*")
     .eq("partido_id", partidoId)
-    .eq("evaluador_id", user.id);
+    .eq("evaluador_id", evaluadorId);
 
   return (data || []) as unknown as {
     id: string;

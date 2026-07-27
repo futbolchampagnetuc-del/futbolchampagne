@@ -8,18 +8,16 @@ export async function realizarSorteo(
   tipo: "random" | "balanceado"
 ) {
   const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("No autenticado");
 
   // Obtener jugadores confirmados
   const { data: asistencias } = await supabase
     .from("asistencia")
     .select("jugador_id")
     .eq("partido_id", partidoId)
-    .eq("confirmado", true);
+    .eq("estado", "asisto");
 
   if (!asistencias || asistencias.length < 4) {
-    throw new Error("Se necesitan al menos 4 jugadores confirmados");
+    throw new Error("Se necesitan al menos 4 jugadores confirmados (asisto)");
   }
 
   const asisArr = asistencias as unknown as { jugador_id: string }[];
@@ -117,4 +115,47 @@ export async function realizarSorteo(
   revalidatePath(`/partido/${partidoId}`);
 
   return { equipoA, equipoB };
+}
+
+export async function guardarSorteoManual(
+  partidoId: string,
+  equipoAIds: string[],
+  equipoBIds: string[]
+) {
+  const supabase = await createServerSupabaseClient();
+
+  // Limpiar asignaciones previas
+  await supabase
+    .from("asignacion_equipos")
+    .delete()
+    .eq("partido_id", partidoId);
+
+  // Insertar nuevas asignaciones
+  const asignaciones = [
+    ...equipoAIds.map((id) => ({
+      partido_id: partidoId,
+      jugador_id: id,
+      equipo: "A" as const,
+      tipo_sorteo: "manual" as const,
+    })),
+    ...equipoBIds.map((id) => ({
+      partido_id: partidoId,
+      jugador_id: id,
+      equipo: "B" as const,
+      tipo_sorteo: "manual" as const,
+    })),
+  ];
+
+  if (asignaciones.length > 0) {
+    const { error } = await supabase
+      .from("asignacion_equipos")
+      .insert(asignaciones as never);
+
+    if (error) throw new Error(error.message);
+  }
+
+  revalidatePath("/sorteo");
+  revalidatePath(`/partido/${partidoId}`);
+  
+  return { success: true };
 }

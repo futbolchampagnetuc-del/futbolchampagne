@@ -24,6 +24,8 @@ export function AvatarWithName({
     lg: "h-14 w-14 text-lg",
   };
 
+  const gradientBg = "bg-gradient-to-br from-[#d4af37]/20 to-[#b8860b]/10";
+
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <div className="relative">
@@ -32,14 +34,16 @@ export function AvatarWithName({
             src={fotoUrl}
             alt={name}
             className={cn(
-              "rounded-full object-cover",
+              "rounded-full object-cover ring-2 ring-[#d4af37]/20",
               sizeClasses[size]
             )}
           />
         ) : (
           <div
             className={cn(
-              "flex items-center justify-center rounded-full bg-green-100 font-semibold text-green-700",
+              "flex items-center justify-center rounded-full font-semibold text-[#a67c2e]",
+              gradientBg,
+              "ring-1 ring-[#d4af37]/20",
               sizeClasses[size]
             )}
           >
@@ -47,12 +51,12 @@ export function AvatarWithName({
           </div>
         )}
         {showDorsal && dorsal && (
-          <span className="absolute -bottom-0.5 -right-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-green-600 px-1 text-[10px] font-bold text-white">
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-gradient-to-r from-[#d4af37] to-[#b8860b] px-1.5 text-[10px] font-bold text-white shadow-sm">
             {dorsal}
           </span>
         )}
       </div>
-      <span className="font-medium text-gray-800">{name}</span>
+      <span className="font-medium text-[#1a1a2e]">{name}</span>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   images: {
@@ -13,6 +14,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  outputFileTracingRoot: path.join(process.cwd(), ""),
+  serverExternalPackages: ["@supabase/supabase-js"],
 };
 
 export default nextConfig;
