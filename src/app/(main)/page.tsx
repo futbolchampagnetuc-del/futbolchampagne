@@ -1,25 +1,10 @@
-import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { formatDateTime } from "@/lib/utils";
-import { WhatsAppAsistenciaClient } from "@/components/features/partido/WhatsAppAsistenciaClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // Obtener el jugador actual (opcional, solo para el saludo)
-  let jugador = null;
-  if (user) {
-    const { data: jugadorRaw } = await supabase
-      .from("jugadores")
-      .select("*")
-      .eq("id", user.id);
-    if (jugadorRaw && jugadorRaw.length > 0) {
-      jugador = jugadorRaw[0] as unknown as { nombre_completo: string };
-    }
-  }
 
   // Obtener próximo partido
   const { data: partidosList } = await supabase
@@ -72,17 +57,15 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-5 animate-fade-in pb-20">
-      {/* Header con saludo */}
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight text-[#1a1a2e]">
             Próximo Partido
           </h1>
-          {jugador && jugador.nombre_completo && (
-            <p className="mt-1 text-sm text-[#6b7280]">
-              ¡Hola, <span className="font-semibold text-[#1a1a2e]">{jugador.nombre_completo.split(" ")[0]}</span>!
-            </p>
-          )}
+          <p className="mt-1 text-sm text-[#6b7280]">
+            ¡Preparate para el encuentro!
+          </p>
         </div>
       </div>
 
@@ -127,11 +110,6 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
-
-          <div className="divider-champagne my-4" />
-
-          {/* Componente interactivo de asistencia por WhatsApp */}
-          <WhatsAppAsistenciaClient />
         </div>
       </div>
 
