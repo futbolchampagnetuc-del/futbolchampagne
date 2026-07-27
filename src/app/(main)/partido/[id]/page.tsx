@@ -197,7 +197,7 @@ export default async function PartidoDetallePage({
         />
       )}
 
-      {partido.estado === "finalizado" && (
+      {(partido.estado === "finalizado" || partido.estado === "jugando") && (
         <PartidoGolesClient
           partidoId={id}
           golesExistentes={goles}

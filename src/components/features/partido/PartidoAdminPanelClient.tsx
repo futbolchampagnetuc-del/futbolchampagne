@@ -73,7 +73,7 @@ export function PartidoAdminPanelClient({
           </select>
         </div>
 
-        {estado === "finalizado" && (
+        {(estado === "finalizado" || estado === "jugando") && (
           <div className="grid grid-cols-2 gap-4 bg-[#faf8f5] p-4 rounded-xl border border-[#e5e0d8]/50">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-[#6b7280]">{equipoANombre}</label>
