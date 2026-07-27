@@ -78,7 +78,7 @@ export default async function HomePage() {
           <h1 className="text-2xl font-extrabold tracking-tight text-[#1a1a2e]">
             Próximo Partido
           </h1>
-          {jugador && (
+          {jugador && jugador.nombre_completo && (
             <p className="mt-1 text-sm text-[#6b7280]">
               ¡Hola, <span className="font-semibold text-[#1a1a2e]">{jugador.nombre_completo.split(" ")[0]}</span>!
             </p>
