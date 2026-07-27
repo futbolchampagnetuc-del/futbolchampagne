@@ -4,9 +4,10 @@ import { formatDateTime } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const supabase = await createServerSupabaseClient();
+  try {
+    const supabase = await createServerSupabaseClient();
 
-  // Obtener próximo partido
+    // Obtener próximo partido
   const { data: partidosList } = await supabase
     .from("partidos")
     .select("*, cancha:canchas(*)")
@@ -173,4 +174,23 @@ export default async function HomePage() {
       )}
     </div>
   );
+  } catch (error: any) {
+    return (
+      <div className="flex flex-col items-center justify-center pt-16 pb-12 px-4 text-center">
+        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
+          <span className="text-4xl">⚠️</span>
+        </div>
+        <h2 className="text-xl font-bold text-red-600 mb-2">Error de Conexión</h2>
+        <p className="text-sm text-gray-600 mb-4">
+          Ocurrió un error al intentar conectarse a la base de datos.
+        </p>
+        <div className="bg-gray-100 p-4 rounded text-left text-xs text-gray-800 w-full overflow-auto">
+          <code>{error?.message || String(error)}</code>
+        </div>
+        <p className="mt-6 text-sm font-semibold text-gray-700">
+          Probablemente falten las variables de entorno (NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY) en Netlify. ¡Asegurate de agregarlas y volver a compilar!
+        </p>
+      </div>
+    );
+  }
 }
