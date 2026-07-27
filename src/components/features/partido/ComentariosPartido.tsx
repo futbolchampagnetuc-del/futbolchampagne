@@ -30,9 +30,14 @@ export function ComentariosPartido({ partidoId, comentariosIniciales, estadoPart
   const [error, setError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom on load
+  const prevComentariosLengthRef = useRef(comentarios.length);
+
+  // Auto-scroll to bottom only when new comments are added
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (comentarios.length > prevComentariosLengthRef.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+    prevComentariosLengthRef.current = comentarios.length;
   }, [comentarios]);
 
   const handleSubmit = async (e: React.FormEvent) => {
