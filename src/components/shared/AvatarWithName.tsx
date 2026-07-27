@@ -6,6 +6,7 @@ interface AvatarWithNameProps {
   fotoUrl?: string | null;
   dorsal?: number | null;
   showDorsal?: boolean;
+  hideName?: boolean;
   size?: "sm" | "md" | "lg";
   className?: string;
 }
@@ -15,6 +16,7 @@ export function AvatarWithName({
   fotoUrl,
   dorsal,
   showDorsal = false,
+  hideName = false,
   size = "md",
   className,
 }: AvatarWithNameProps) {
@@ -56,7 +58,9 @@ export function AvatarWithName({
           </span>
         )}
       </div>
-      <span className="font-medium text-[#1a1a2e]">{name}</span>
+      {!hideName && (
+        <span className="font-medium text-[#1a1a2e]">{name}</span>
+      )}
     </div>
   );
 }
