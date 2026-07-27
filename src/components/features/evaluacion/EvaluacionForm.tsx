@@ -43,25 +43,40 @@ export function EvaluacionForm({
     });
     return initial;
   });
+  
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleStarChange = (jugadorId: string, value: number) => {
+  const jugadorActual = jugadores[currentIndex];
+  const isFinished = currentIndex >= jugadores.length;
+
+  const handleStarChange = (value: number) => {
+    if (!jugadorActual) return;
     setVotos((prev) => ({
       ...prev,
-      [jugadorId]: { ...prev[jugadorId], estrellas: value },
+      [jugadorActual.id]: { ...prev[jugadorActual.id], estrellas: value },
     }));
   };
 
-  const handleComentarioChange = (jugadorId: string, value: string) => {
+  const handleComentarioChange = (value: string) => {
+    if (!jugadorActual) return;
     setVotos((prev) => ({
       ...prev,
-      [jugadorId]: { ...prev[jugadorId], comentario: value },
+      [jugadorActual.id]: { ...prev[jugadorActual.id], comentario: value },
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleNext = () => {
+    setCurrentIndex((prev) => prev + 1);
+  };
+  
+  const handleBack = () => {
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setSaving(true);
 
     try {
@@ -69,7 +84,7 @@ export function EvaluacionForm({
         if (voto.estrellas > 0) {
           await votarJugador(
             partidoId,
-            evaluadorId, // Admin evaluation ID
+            evaluadorId,
             jugadorId,
             voto.estrellas,
             voto.comentario || undefined
@@ -86,12 +101,9 @@ export function EvaluacionForm({
     }
   };
 
-  const totalVotados = Object.values(votos).filter((v) => v.estrellas > 0).length;
-  const todosVotados = totalVotados === jugadores.length;
-
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 animate-scale-in">
+      <div className="flex flex-col items-center justify-center py-16 animate-scale-in card-premium">
         <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#0d9488]/20 to-[#0f766e]/10">
           <svg className="h-8 w-8 text-[#0d9488]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -105,90 +117,116 @@ export function EvaluacionForm({
     );
   }
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="card-premium p-4">
-        <p className="text-sm text-[#6b7280]">
-          Votá a cada jugador del 1 al 5. El promedio se usa para el ranking.
-        </p>
-      </div>
-
-      {jugadores.map((jugador) => (
-        <div
-          key={jugador.id}
-          className={cn(
-            "card-premium p-4 transition-all duration-200 animate-slide-up",
-            votos[jugador.id]?.estrellas > 0
-              ? "border-[#d4af37]/30 bg-[#faf8f5]"
-              : ""
-          )}
-        >
-          <AvatarWithName
-            name={jugador.nombre_completo}
-            fotoUrl={jugador.foto_url}
-            size="md"
-            className="mb-3"
-          />
-
-          <div className="ml-12 space-y-3">
-            <div>
-              <p className="mb-1.5 text-xs font-semibold text-[#6b7280] uppercase tracking-wide">
-                Rendimiento
-              </p>
-              <StarRating
-                value={votos[jugador.id]?.estrellas || 0}
-                onChange={(value) => handleStarChange(jugador.id, value)}
-              />
-            </div>
-
-            <div>
-              <textarea
-                placeholder="Comentario (opcional)..."
-                value={votos[jugador.id]?.comentario || ""}
-                onChange={(e) =>
-                  handleComentarioChange(jugador.id, e.target.value)
-                }
-                rows={2}
-                maxLength={200}
-                className="input-premium resize-none"
-              />
-            </div>
+  // Resumen final antes de enviar
+  if (isFinished) {
+    const totalVotados = Object.values(votos).filter((v) => v.estrellas > 0).length;
+    
+    return (
+      <div className="space-y-4 animate-fade-in">
+        <div className="card-premium p-6 text-center">
+          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#d4af37]/20 to-[#b8860b]/10 text-3xl">
+            📋
+          </div>
+          <h2 className="text-xl font-bold text-[#1a1a2e] mb-2">Resumen de Votación</h2>
+          <p className="text-[#6b7280] mb-6">
+            Vas a enviar {totalVotados} evaluaciones.
+          </p>
+          
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => handleSubmit()}
+              disabled={saving || totalVotados === 0}
+              className="btn-primary w-full py-4 text-base"
+            >
+              {saving ? (
+                <div className="mx-auto h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                "Guardar y Finalizar"
+              )}
+            </button>
+            <button
+              onClick={() => setCurrentIndex(0)}
+              disabled={saving}
+              className="px-4 py-2 text-sm font-semibold text-[#6b7280] hover:text-[#1a1a2e]"
+            >
+              Volver a revisar
+            </button>
           </div>
         </div>
-      ))}
+      </div>
+    );
+  }
 
-      <div className="card-premium flex items-center justify-between p-4">
-        <p className="text-sm font-medium text-[#6b7280]">
-          {totalVotados} de {jugadores.length} jugadores votados
-        </p>
-        {!todosVotados && (
-          <span className="badge-champagne text-xs">
-            Faltan {jugadores.length - totalVotados}
-          </span>
-        )}
-        {todosVotados && totalVotados > 0 && (
-          <span className="badge-emerald text-xs">
-            ¡Completado!
-          </span>
-        )}
+  // Wizard Paso a Paso
+  return (
+    <div className="space-y-4 animate-fade-in">
+      <div className="flex items-center justify-between px-2">
+        <span className="text-sm font-semibold text-[#6b7280]">
+          Jugador {currentIndex + 1} de {jugadores.length}
+        </span>
+        <div className="flex gap-1">
+          {jugadores.map((_, i) => (
+            <div 
+              key={i} 
+              className={cn(
+                "h-1.5 rounded-full transition-all duration-300",
+                i === currentIndex ? "w-4 bg-[#d4af37]" : 
+                i < currentIndex ? "w-1.5 bg-[#d4af37]/40" : "w-1.5 bg-gray-200"
+              )}
+            />
+          ))}
+        </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={saving || totalVotados === 0}
-        className="btn-primary w-full text-base py-4"
-      >
-        {saving ? (
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-        ) : (
-          <>
-            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+      <div className="card-premium p-6 relative overflow-hidden min-h-[300px] flex flex-col">
+        <div className="flex-1 flex flex-col items-center text-center">
+          <AvatarWithName
+            name={jugadorActual.nombre_completo}
+            fotoUrl={jugadorActual.foto_url}
+            size="lg"
+            className="mb-4 flex-col gap-3"
+          />
+          
+          <div className="w-full max-w-sm mt-4 space-y-5">
+            <div className="flex justify-center">
+              <StarRating
+                value={votos[jugadorActual.id]?.estrellas || 0}
+                onChange={handleStarChange}
+                size="lg"
+              />
+            </div>
+            
+            <textarea
+              placeholder="Comentario de su rendimiento (opcional)..."
+              value={votos[jugadorActual.id]?.comentario || ""}
+              onChange={(e) => handleComentarioChange(e.target.value)}
+              rows={3}
+              maxLength={200}
+              className="input-premium w-full resize-none text-center"
+            />
+          </div>
+        </div>
+        
+        <div className="mt-8 flex gap-3 pt-4 border-t border-gray-100">
+          <button
+            onClick={handleBack}
+            disabled={currentIndex === 0}
+            className="px-4 py-3 rounded-xl border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 disabled:opacity-30 transition-all"
+          >
+            Atrás
+          </button>
+          
+          <button
+            onClick={handleNext}
+            className="flex-1 btn-primary py-3 flex justify-center items-center gap-2"
+          >
+            {currentIndex === jugadores.length - 1 ? "Finalizar" : "Siguiente"}
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
             </svg>
-            Guardar evaluaciones ({totalVotados})
-          </>
-        )}
-      </button>
-    </form>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
