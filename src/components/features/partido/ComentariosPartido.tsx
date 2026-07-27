@@ -9,7 +9,8 @@ type Comentario = {
   id: string;
   texto: string;
   created_at: string;
-  jugador: {
+  autor_nombre: string;
+  jugador?: {
     nombre_completo: string;
     foto_url: string | null;
   };
@@ -18,12 +19,13 @@ type Comentario = {
 interface ComentariosPartidoProps {
   partidoId: string;
   comentariosIniciales: Comentario[];
-  jugadorIdActual: string | null;
+  estadoPartido: string;
 }
 
-export function ComentariosPartido({ partidoId, comentariosIniciales, jugadorIdActual }: ComentariosPartidoProps) {
+export function ComentariosPartido({ partidoId, comentariosIniciales, estadoPartido }: ComentariosPartidoProps) {
   const [comentarios, setComentarios] = useState<Comentario[]>(comentariosIniciales);
   const [texto, setTexto] = useState("");
+  const [nombre, setNombre] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -35,7 +37,7 @@ export function ComentariosPartido({ partidoId, comentariosIniciales, jugadorIdA
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!texto.trim() || !jugadorIdActual) return;
+    if (!texto.trim() || !nombre.trim()) return;
 
     setIsSubmitting(true);
     setError("");
@@ -46,17 +48,14 @@ export function ComentariosPartido({ partidoId, comentariosIniciales, jugadorIdA
         id: "temp-" + Date.now(),
         texto: texto.trim(),
         created_at: new Date().toISOString(),
-        jugador: {
-          nombre_completo: "Tú", // Will be revalidated from server anyway
-          foto_url: null,
-        }
+        autor_nombre: nombre.trim(),
       };
       
       setComentarios((prev) => [...prev, nuevoComentario]);
       const tempTexto = texto;
       setTexto("");
 
-      const res = await agregarComentario(partidoId, jugadorIdActual, tempTexto);
+      const res = await agregarComentario(partidoId, nombre.trim(), tempTexto);
       
       if (!res.success) {
         setError(res.error || "Ocurrió un error al enviar");
@@ -88,56 +87,73 @@ export function ComentariosPartido({ partidoId, comentariosIniciales, jugadorIdA
             <p className="text-xs mt-1">¡Sé el primero en agitarla!</p>
           </div>
         ) : (
-          comentarios.map((c) => (
-            <div key={c.id} className="flex gap-3 animate-fade-in">
-              <div className="shrink-0 pt-1">
-                <AvatarWithName name={c.jugador.nombre_completo} fotoUrl={c.jugador.foto_url} size="sm" hideName />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xs font-bold text-[#1a1a2e] truncate">
-                    {c.jugador.nombre_completo.split(" ")[0]}
-                  </span>
-                  <span className="text-[10px] text-[#9ca3af]">
-                    {formatTime(c.created_at)}
-                  </span>
+          comentarios.map((c) => {
+            const nombreMostrado = c.autor_nombre || c.jugador?.nombre_completo || "Anónimo";
+            const fotoUrl = c.jugador?.foto_url || null;
+
+            return (
+              <div key={c.id} className="flex gap-3 animate-fade-in">
+                <div className="shrink-0 pt-1">
+                  <AvatarWithName name={nombreMostrado} fotoUrl={fotoUrl} size="sm" hideName />
                 </div>
-                <div className="mt-0.5 rounded-2xl rounded-tl-none bg-white px-3 py-2 text-sm text-[#374151] shadow-sm border border-gray-100">
-                  {c.texto}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xs font-bold text-[#1a1a2e] truncate">
+                      {nombreMostrado}
+                    </span>
+                    <span className="text-[10px] text-[#9ca3af]">
+                      {formatTime(c.created_at)}
+                    </span>
+                  </div>
+                  <div className="mt-0.5 rounded-2xl rounded-tl-none bg-white px-3 py-2 text-sm text-[#374151] shadow-sm border border-gray-100 break-words whitespace-pre-wrap">
+                    {c.texto}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
         <div ref={bottomRef} />
       </div>
 
       <div className="p-3 bg-white border-t border-gray-100">
         {error && <p className="text-xs text-red-500 mb-2 px-1">{error}</p>}
-        {jugadorIdActual ? (
-          <form onSubmit={handleSubmit} className="flex gap-2">
+        {estadoPartido !== "finalizado" ? (
+          <p className="text-xs text-center text-gray-500 py-1">
+            Los comentarios se habilitan cuando finaliza el partido. ¡El Tercer Tiempo!
+          </p>
+        ) : (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <input
               type="text"
-              value={texto}
-              onChange={(e) => setTexto(e.target.value)}
-              placeholder="Escribí un comentario..."
-              className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-[#d4af37] focus:outline-none focus:ring-1 focus:ring-[#d4af37] transition-all"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              placeholder="Tu nombre (ej. Juan)"
+              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-[#d4af37] focus:outline-none focus:ring-1 focus:ring-[#d4af37] transition-all"
               disabled={isSubmitting}
+              maxLength={30}
             />
-            <button
-              type="submit"
-              disabled={!texto.trim() || isSubmitting}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1a1a2e] text-white disabled:opacity-50 hover:bg-[#d4af37] transition-colors"
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-              </svg>
-            </button>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={texto}
+                onChange={(e) => setTexto(e.target.value)}
+                placeholder="Escribí un comentario..."
+                className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-[#d4af37] focus:outline-none focus:ring-1 focus:ring-[#d4af37] transition-all"
+                disabled={isSubmitting || !nombre.trim()}
+                maxLength={200}
+              />
+              <button
+                type="submit"
+                disabled={!texto.trim() || !nombre.trim() || isSubmitting}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1a1a2e] text-white disabled:opacity-50 hover:bg-[#d4af37] transition-colors"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                </svg>
+              </button>
+            </div>
           </form>
-        ) : (
-          <p className="text-xs text-center text-gray-500 py-1">
-            Tenés que registrarte para poder comentar
-          </p>
         )}
       </div>
     </div>

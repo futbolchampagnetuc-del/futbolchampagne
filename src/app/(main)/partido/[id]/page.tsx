@@ -251,7 +251,7 @@ export default async function PartidoDetallePage({
         <ComentariosPartido
           partidoId={id}
           comentariosIniciales={comentariosIniciales}
-          jugadorIdActual={jugadorIdActual}
+          estadoPartido={partido.estado}
         />
       </div>
     </div>

@@ -33,6 +33,7 @@ export default async function HomePage() {
     ? partidosList[0] as unknown as {
         id: string;
         fecha_hora: string;
+        estado: string;
         cancha: { nombre: string; direccion: string };
       }
     : null;
@@ -200,7 +201,7 @@ export default async function HomePage() {
         <ComentariosPartido
           partidoId={partido.id}
           comentariosIniciales={comentariosIniciales}
-          jugadorIdActual={jugadorIdActual}
+          estadoPartido={partido.estado}
         />
       </div>
     </div>
