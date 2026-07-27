@@ -12,6 +12,7 @@ export function formatDate(date: string | Date): string {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "America/Argentina/Buenos_Aires",
   });
 }
 
@@ -20,6 +21,7 @@ export function formatTime(date: string | Date): string {
   return d.toLocaleTimeString("es-AR", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "America/Argentina/Buenos_Aires",
   });
 }
 
