@@ -8,7 +8,6 @@ export const dynamic = "force-dynamic";
 export default async function PartidosPage() {
   const supabase = await createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
 
   // Obtener todos los partidos ordenados por fecha descendente
   const { data: partidosRaw } = await supabase

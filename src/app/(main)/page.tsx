@@ -1,17 +1,30 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { formatDateTime } from "@/lib/utils";
+import { ComentariosPartido } from "@/components/features/partido/ComentariosPartido";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   try {
     const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    let jugadorIdActual = null;
+    if (user && user.email) {
+      const { data: userData } = await supabase
+        .from("jugadores")
+        .select("id")
+        .eq("email", user.email)
+        .single();
+      if (userData) {
+        jugadorIdActual = userData.id;
+      }
+    }
 
     // Obtener próximo partido
   const { data: partidosList } = await supabase
     .from("partidos")
     .select("*, cancha:canchas(*)")
-    .eq("estado", "programado")
+    .in("estado", ["programado", "jugando"])
     .gte("fecha_hora", new Date().toISOString())
     .order("fecha_hora", { ascending: true })
     .limit(1);
@@ -55,6 +68,15 @@ export default async function HomePage() {
 
   const equipoA = asignaciones.filter((a) => a.equipo === "A");
   const equipoB = asignaciones.filter((a) => a.equipo === "B");
+
+  // Obtener comentarios
+  const { data: comentariosRaw } = await supabase
+    .from("comentarios_partido")
+    .select("*, jugador:jugadores(nombre_completo, foto_url)")
+    .eq("partido_id", partido.id)
+    .order("created_at", { ascending: true });
+    
+  const comentariosIniciales = (comentariosRaw || []) as any[];
 
   return (
     <div className="space-y-5 animate-fade-in pb-20">
@@ -172,6 +194,15 @@ export default async function HomePage() {
           </p>
         </div>
       )}
+
+      {/* Comentarios / La Tribuna */}
+      <div className="mt-8">
+        <ComentariosPartido
+          partidoId={partido.id}
+          comentariosIniciales={comentariosIniciales}
+          jugadorIdActual={jugadorIdActual}
+        />
+      </div>
     </div>
   );
   } catch (error: any) {

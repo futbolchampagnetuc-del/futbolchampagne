@@ -5,6 +5,7 @@ import { AvatarWithName } from "@/components/shared/AvatarWithName";
 import { PartidoGolesClient } from "@/components/features/partido/PartidoGolesClient";
 import { PartidoAsistenciaClient } from "@/components/features/partido/PartidoAsistenciaClient";
 import { PartidoAdminPanelClient } from "@/components/features/partido/PartidoAdminPanelClient";
+import { ComentariosPartido } from "@/components/features/partido/ComentariosPartido";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -80,6 +81,29 @@ export default async function PartidoDetallePage({
     cantidad_goles: number;
     jugador: { nombre_completo: string };
   }[];
+
+  // Comentarios
+  const { data: comentariosRaw } = await supabase
+    .from("comentarios_partido")
+    .select("*, jugador:jugadores(nombre_completo, foto_url)")
+    .eq("partido_id", id)
+    .order("created_at", { ascending: true });
+    
+  const comentariosIniciales = (comentariosRaw || []) as any[];
+
+  // Usuario actual
+  const { data: { user } } = await supabase.auth.getUser();
+  let jugadorIdActual = null;
+  if (user && user.email) {
+    const { data: userData } = await supabase
+      .from("jugadores")
+      .select("id")
+      .eq("email", user.email)
+      .single();
+    if (userData) {
+      jugadorIdActual = userData.id;
+    }
+  }
 
   return (
     <div className="space-y-5 animate-fade-in pb-24">
@@ -221,6 +245,15 @@ export default async function PartidoDetallePage({
           Evaluar jugadores
         </Link>
       )}
+
+      {/* Comentarios */}
+      <div className="mt-8">
+        <ComentariosPartido
+          partidoId={id}
+          comentariosIniciales={comentariosIniciales}
+          jugadorIdActual={jugadorIdActual}
+        />
+      </div>
     </div>
   );
 }
