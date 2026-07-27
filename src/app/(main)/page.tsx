@@ -1,24 +1,25 @@
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { formatDateTime } from "@/lib/utils";
-import { ProximoPartidoClient } from "@/components/features/partido/ProximoPartidoClient";
+import { WhatsAppAsistenciaClient } from "@/components/features/partido/WhatsAppAsistenciaClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const supabase = await createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
 
-  // Obtener el jugador actual
-  const { data: jugadorRaw } = await supabase
-    .from("jugadores")
-    .select("*")
-    .eq("id", user.id);
-
-  const jugador = jugadorRaw && jugadorRaw.length > 0
-    ? jugadorRaw[0] as unknown as { nombre_completo: string }
-    : null;
+  // Obtener el jugador actual (opcional, solo para el saludo)
+  let jugador = null;
+  if (user) {
+    const { data: jugadorRaw } = await supabase
+      .from("jugadores")
+      .select("*")
+      .eq("id", user.id);
+    if (jugadorRaw && jugadorRaw.length > 0) {
+      jugador = jugadorRaw[0] as unknown as { nombre_completo: string };
+    }
+  }
 
   // Obtener próximo partido
   const { data: partidosList } = await supabase
@@ -55,26 +56,22 @@ export default async function HomePage() {
     );
   }
 
-  // Obtener asistencias del partido
-  const { data: asistenciasRaw } = await supabase
-    .from("asistencia")
-    .select("*, jugador:jugadores(*)")
+  // Obtener equipos formados para este partido
+  const { data: asignacionesRaw } = await supabase
+    .from("asignacion_equipos")
+    .select("*, jugador:jugadores(nombre_completo, foto_url)")
     .eq("partido_id", partido.id);
 
-  const asistencias = (asistenciasRaw || []) as unknown as {
-    id: string;
-    partido_id: string;
-    jugador_id: string;
-    confirmado: boolean;
-    jugador: { nombre_completo: string };
+  const asignaciones = (asignacionesRaw || []) as unknown as {
+    equipo: "A" | "B";
+    jugador: { nombre_completo: string; foto_url: string | null };
   }[];
 
-  const confirmados = asistencias.filter((a) => a.confirmado);
-  const noConfirmados = asistencias.filter((a) => !a.confirmado);
-  const miAsistencia = asistencias.find((a) => a.jugador_id === user.id);
+  const equipoA = asignaciones.filter((a) => a.equipo === "A");
+  const equipoB = asignaciones.filter((a) => a.equipo === "B");
 
   return (
-    <div className="space-y-5 animate-fade-in">
+    <div className="space-y-5 animate-fade-in pb-20">
       {/* Header con saludo */}
       <div className="flex items-center justify-between">
         <div>
@@ -86,20 +83,6 @@ export default async function HomePage() {
               ¡Hola, <span className="font-semibold text-[#1a1a2e]">{jugador.nombre_completo.split(" ")[0]}</span>!
             </p>
           )}
-        </div>
-        <div className="flex gap-2">
-          <Link
-            href="/partidos"
-            className="badge-champagne text-xs"
-          >
-            📋 Historial
-          </Link>
-          <Link
-            href="/sorteo"
-            className="badge-champagne text-xs"
-          >
-            🎲 Sorteo
-          </Link>
         </div>
       </div>
 
@@ -147,81 +130,69 @@ export default async function HomePage() {
 
           <div className="divider-champagne my-4" />
 
-          {/* Componente interactivo de asistencia */}
-          <ProximoPartidoClient
-            partidoId={partido.id}
-            jugadorId={user.id}
-            miAsistencia={miAsistencia?.confirmado ?? null}
-          />
+          {/* Componente interactivo de asistencia por WhatsApp */}
+          <WhatsAppAsistenciaClient />
         </div>
       </div>
 
-      {/* Lista de asistentes */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-[#1a1a2e]">
-            Asistencia
-          </h2>
-          <span className="badge-champagne">
-            {confirmados.length} confirmados
-          </span>
-        </div>
-
-        {confirmados.length === 0 && (
-          <div className="card-premium p-6 text-center">
-            <p className="text-sm text-[#6b7280]">
-              Nadie confirmó todavía. ¡Sé el primero!
-            </p>
-          </div>
-        )}
-
-        <div className="space-y-2">
-          {confirmados.map((a) => (
-            <div key={a.id} className="card-premium flex items-center gap-3 px-4 py-3 animate-slide-up">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#0d9488] to-[#0f766e] text-sm font-bold text-white shadow-sm">
-                {a.jugador?.nombre_completo?.charAt(0) || "?"}
+      {/* Equipos Formados */}
+      {(equipoA.length > 0 || equipoB.length > 0) ? (
+        <div className="space-y-4">
+          <h2 className="text-lg font-bold text-[#1a1a2e]">Equipos Confirmados</h2>
+          
+          <div className="grid grid-cols-2 gap-3">
+            {/* EQUIPO A */}
+            <div className="card-premium overflow-hidden border-t-4 border-t-blue-500">
+              <div className="bg-blue-50/50 p-2 text-center border-b border-gray-100">
+                <h3 className="font-bold text-blue-900">Equipo A</h3>
               </div>
-              <div className="flex-1">
-                <p className="font-semibold text-[#1a1a2e]">
-                  {a.jugador?.nombre_completo}
-                </p>
-              </div>
-              <span className="badge-emerald">
-                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                </svg>
-                Va
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {noConfirmados.length > 0 && (
-          <>
-            <div className="divider-champagne my-2" />
-            <h3 className="text-sm font-medium text-[#6b7280]">
-              No van ({noConfirmados.length})
-            </h3>
-            <div className="space-y-2">
-              {noConfirmados.map((a) => (
-                <div key={a.id} className="card-premium flex items-center gap-3 px-4 py-3 opacity-75">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f0ede6] text-sm font-bold text-[#9ca3af]">
-                    {a.jugador?.nombre_completo?.charAt(0) || "?"}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-[#6b7280]">
+              <div className="p-2 space-y-1">
+                {equipoA.map((a, i) => (
+                  <div key={i} className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-50">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[10px] font-bold text-blue-700">
+                      {a.jugador?.nombre_completo?.charAt(0) || "?"}
+                    </div>
+                    <span className="text-xs font-medium text-gray-700 truncate">
                       {a.jugador?.nombre_completo}
-                    </p>
+                    </span>
                   </div>
-                  <span className="badge-champagne bg-[#f0ede6] text-[#9ca3af] border-[#e5e0d8]">
-                    ✕ No va
-                  </span>
-                </div>
-              ))}
+                ))}
+                {equipoA.length === 0 && (
+                  <p className="text-xs text-center text-gray-400 py-4">Sin jugadores</p>
+                )}
+              </div>
             </div>
-          </>
-        )}
-      </div>
+
+            {/* EQUIPO B */}
+            <div className="card-premium overflow-hidden border-t-4 border-t-red-500">
+              <div className="bg-red-50/50 p-2 text-center border-b border-gray-100">
+                <h3 className="font-bold text-red-900">Equipo B</h3>
+              </div>
+              <div className="p-2 space-y-1">
+                {equipoB.map((a, i) => (
+                  <div key={i} className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-50">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100 text-[10px] font-bold text-red-700">
+                      {a.jugador?.nombre_completo?.charAt(0) || "?"}
+                    </div>
+                    <span className="text-xs font-medium text-gray-700 truncate">
+                      {a.jugador?.nombre_completo}
+                    </span>
+                  </div>
+                ))}
+                {equipoB.length === 0 && (
+                  <p className="text-xs text-center text-gray-400 py-4">Sin jugadores</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="card-premium p-6 text-center">
+          <p className="text-sm text-[#6b7280]">
+            Los equipos aún no han sido armados.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
