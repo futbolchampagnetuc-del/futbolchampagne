@@ -59,7 +59,7 @@ export function AvatarWithName({
         )}
       </div>
       {!hideName && (
-        <span className="font-medium text-[#1a1a2e]">{name}</span>
+        <span className="font-medium text-foreground">{name}</span>
       )}
     </div>
   );
