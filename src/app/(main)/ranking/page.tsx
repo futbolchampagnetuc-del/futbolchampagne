@@ -61,63 +61,48 @@ export default async function RankingPage() {
                 <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">Podio</h2>
               </div>
               {rankings.length >= 3 ? (
-                <div className="flex items-end justify-center gap-3">
+                <div className="flex items-end justify-center gap-2 sm:gap-3">
                   {/* 2do */}
-                  <div className="flex flex-col items-center order-1">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#94a3b8] to-[#64748b] flex items-center justify-center mb-2 shadow-lg">
-                      <span className="text-white font-black text-lg">2</span>
+                  <div className="flex flex-col items-center order-1 max-w-[30%]">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#94a3b8] to-[#64748b] flex items-center justify-center mb-2 shadow-lg">
+                      <span className="text-white font-black text-base sm:text-lg">2</span>
                     </div>
-                    <AvatarWithName
-                      name={rankings[1].nombre_completo}
-                      fotoUrl={rankings[1].foto_url}
-                      size="sm"
-                      className="text-center"
-                    />
+                    <p className="text-[10px] sm:text-xs font-semibold text-foreground text-center leading-tight truncate max-w-full">{rankings[1].nombre_completo}</p>
                     <div className="flex items-center gap-0.5 mt-1">
-                      <Star className="w-3 h-3 fill-[#d4af37] text-[#d4af37]" />
-                      <span className="text-xs font-bold text-foreground">{rankings[1].promedio_estrellas.toFixed(1)}</span>
+                      <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-[#d4af37] text-[#d4af37]" />
+                      <span className="text-[10px] sm:text-xs font-bold text-foreground">{rankings[1].promedio_estrellas.toFixed(1)}</span>
                     </div>
                   </div>
 
                   {/* 1ro */}
-                  <div className="flex flex-col items-center order-0 -mt-4">
+                  <div className="flex flex-col items-center order-0 -mt-3 sm:-mt-4 max-w-[34%]">
                     <div className="relative">
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#d4af37] to-[#b8860b] flex items-center justify-center mb-2 shadow-lg animate-pulse-glow">
-                        <span className="text-white font-black text-2xl">1</span>
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#d4af37] to-[#b8860b] flex items-center justify-center mb-2 shadow-lg animate-pulse-glow">
+                        <span className="text-white font-black text-xl sm:text-2xl">1</span>
                       </div>
-                      <Trophy className="absolute -top-2 -right-2 w-6 h-6 text-[#d4af37]" />
+                      <Trophy className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 text-[#d4af37]" />
                     </div>
-                    <AvatarWithName
-                      name={rankings[0].nombre_completo}
-                      fotoUrl={rankings[0].foto_url}
-                      size="sm"
-                      className="text-center"
-                    />
+                    <p className="text-[10px] sm:text-xs font-semibold text-foreground text-center leading-tight truncate max-w-full">{rankings[0].nombre_completo}</p>
                     <div className="flex items-center gap-0.5 mt-1">
-                      <Star className="w-3.5 h-3.5 fill-[#d4af37] text-[#d4af37]" />
-                      <span className="text-sm font-black text-foreground">{rankings[0].promedio_estrellas.toFixed(1)}</span>
+                      <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-[#d4af37] text-[#d4af37]" />
+                      <span className="text-xs sm:text-sm font-black text-foreground">{rankings[0].promedio_estrellas.toFixed(1)}</span>
                     </div>
                     {rankings[0].total_mvp > 0 && (
-                      <span className="text-[10px] font-bold text-[#d4af37] bg-[#d4af37]/10 px-2 py-0.5 rounded-full mt-1">
+                      <span className="text-[9px] sm:text-[10px] font-bold text-[#d4af37] bg-[#d4af37]/10 px-1.5 sm:px-2 py-0.5 rounded-full mt-1 truncate max-w-full">
                         {rankings[0].total_mvp}x MVP
                       </span>
                     )}
                   </div>
 
                   {/* 3ro */}
-                  <div className="flex flex-col items-center order-2">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#d97706] to-[#b45309] flex items-center justify-center mb-2 shadow-lg">
-                      <span className="text-white font-black text-lg">3</span>
+                  <div className="flex flex-col items-center order-2 max-w-[30%]">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#d97706] to-[#b45309] flex items-center justify-center mb-2 shadow-lg">
+                      <span className="text-white font-black text-base sm:text-lg">3</span>
                     </div>
-                    <AvatarWithName
-                      name={rankings[2].nombre_completo}
-                      fotoUrl={rankings[2].foto_url}
-                      size="sm"
-                      className="text-center"
-                    />
+                    <p className="text-[10px] sm:text-xs font-semibold text-foreground text-center leading-tight truncate max-w-full">{rankings[2].nombre_completo}</p>
                     <div className="flex items-center gap-0.5 mt-1">
-                      <Star className="w-3 h-3 fill-[#d4af37] text-[#d4af37]" />
-                      <span className="text-xs font-bold text-foreground">{rankings[2].promedio_estrellas.toFixed(1)}</span>
+                      <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-[#d4af37] text-[#d4af37]" />
+                      <span className="text-[10px] sm:text-xs font-bold text-foreground">{rankings[2].promedio_estrellas.toFixed(1)}</span>
                     </div>
                   </div>
                 </div>
@@ -160,17 +145,17 @@ export default async function RankingPage() {
                     />
 
                     {/* Stats row */}
-                    <div className="flex items-center gap-2 text-xs font-medium shrink-0">
+                    <div className="flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs font-medium shrink-0">
                       <span className="flex items-center gap-0.5 text-foreground">
-                        <Star className="w-3 h-3 fill-[#d4af37] text-[#d4af37]" />
+                        <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-[#d4af37] text-[#d4af37]" />
                         {r.promedio_estrellas.toFixed(1)}
                       </span>
                       <span className="flex items-center gap-0.5 text-foreground">
-                        <Goal className="w-3 h-3 text-emerald-400" />
+                        <Goal className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400" />
                         {r.total_goles}
                       </span>
                       {r.total_mvp > 0 && (
-                        <span className="text-[#d4af37] font-semibold">{r.total_mvp}xMVP</span>
+                        <span className="text-[#d4af37] font-semibold hidden sm:inline">{r.total_mvp}xMVP</span>
                       )}
                     </div>
 

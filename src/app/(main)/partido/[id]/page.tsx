@@ -119,19 +119,19 @@ export default async function PartidoDetallePage({
           </div>
 
           {(partido.estado === "finalizado" || (partido.equipo_a_goles !== null && partido.equipo_b_goles !== null)) && (
-            <div className="mt-5 rounded-xl bg-muted/50 border border-border py-4 px-6 flex items-center justify-center gap-6">
-              <div className="text-center">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{partido.equipo_a_nombre}</p>
-                <p className="text-4xl font-black text-foreground mt-1">{partido.equipo_a_goles ?? "?"}</p>
+            <div className="mt-5 rounded-xl bg-muted/50 border border-border py-3 sm:py-4 px-3 sm:px-6 flex items-center justify-center gap-3 sm:gap-6">
+              <div className="text-center min-w-0 flex-1">
+                <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide truncate">{partido.equipo_a_nombre}</p>
+                <p className="text-3xl sm:text-4xl font-black text-foreground mt-1">{partido.equipo_a_goles ?? "?"}</p>
               </div>
-              <div className="flex flex-col items-center">
-                <div className="h-8 w-px bg-[#d4af37]/30" />
-                <p className="text-xs font-bold text-[#d4af37] px-3 py-1">VS</p>
-                <div className="h-8 w-px bg-[#d4af37]/30" />
+              <div className="flex flex-col items-center shrink-0">
+                <div className="h-6 sm:h-8 w-px bg-[#d4af37]/30" />
+                <p className="text-[10px] sm:text-xs font-bold text-[#d4af37] px-2 sm:px-3 py-0.5 sm:py-1">VS</p>
+                <div className="h-6 sm:h-8 w-px bg-[#d4af37]/30" />
               </div>
-              <div className="text-center">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{partido.equipo_b_nombre}</p>
-                <p className="text-4xl font-black text-foreground mt-1">{partido.equipo_b_goles ?? "?"}</p>
+              <div className="text-center min-w-0 flex-1">
+                <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide truncate">{partido.equipo_b_nombre}</p>
+                <p className="text-3xl sm:text-4xl font-black text-foreground mt-1">{partido.equipo_b_goles ?? "?"}</p>
               </div>
             </div>
           )}

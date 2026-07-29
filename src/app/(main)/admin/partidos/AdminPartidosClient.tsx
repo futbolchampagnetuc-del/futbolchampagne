@@ -169,38 +169,38 @@ export function AdminPartidosClient({ partidos, canchas }: { partidos: any[]; ca
                       {p.estado}
                     </span>
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-1.5 sm:gap-2">
                     {p.estado !== "finalizado" && (
-                      <div className="flex gap-2">
+                      <div className="flex gap-1.5 sm:gap-2">
                         <Link 
                           href="/sorteo"
-                          className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium bg-[#f0ede6] text-[#a67c2e] hover:bg-[#e5e0d8] flex-1"
+                          className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-[10px] sm:text-sm font-medium bg-[#f0ede6] text-[#a67c2e] hover:bg-[#e5e0d8] flex-1"
                         >
-                          <Users className="w-4 h-4" /> Equipos
+                          <Users className="w-3 h-3 sm:w-4 sm:h-4" /><span className="hidden sm:inline">Equipos</span>
                         </Link>
                         <button 
                           onClick={() => handleFinalizar(p.id)} 
                           disabled={loading}
-                          className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium bg-[#f0fdfa] text-[#0d9488] hover:bg-[#e6f7f2] flex-1"
+                          className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-[10px] sm:text-sm font-medium bg-[#f0fdfa] text-[#0d9488] hover:bg-[#e6f7f2] flex-1"
                         >
-                          <CheckCircle2 className="w-4 h-4" /> Finalizar
+                          <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4" /><span className="hidden sm:inline">Finalizar</span>
                         </button>
                       </div>
                     )}
-                    <div className="flex gap-2">
+                    <div className="flex gap-1.5 sm:gap-2">
                       <button 
                         onClick={() => handleEditClick(p)} 
                         disabled={loading}
-                        className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium bg-[#f0ede6] text-[#6b7280] hover:bg-[#d4af37]/20 hover:text-[#a67c2e] flex-1"
+                        className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-[10px] sm:text-sm font-medium bg-[#f0ede6] text-[#6b7280] hover:bg-[#d4af37]/20 hover:text-[#a67c2e] flex-1"
                       >
-                        <Edit2 className="w-4 h-4" /> Editar
+                        <Edit2 className="w-3 h-3 sm:w-4 sm:h-4" /><span className="hidden sm:inline">Editar</span>
                       </button>
                       <button 
                         onClick={() => handleDelete(p.id)} 
                         disabled={loading}
-                        className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium bg-red-50 text-red-500 hover:bg-red-100 flex-1"
+                        className="flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-[10px] sm:text-sm font-medium bg-red-50 text-red-500 hover:bg-red-100 flex-1"
                       >
-                        <Trash2 className="w-4 h-4" /> Eliminar
+                        <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" /><span className="hidden sm:inline">Eliminar</span>
                       </button>
                     </div>
                   </div>

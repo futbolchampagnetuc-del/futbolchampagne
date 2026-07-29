@@ -118,7 +118,7 @@ export default async function JugadorDetallePage({
           <Users className="w-4 h-4 text-[#d4af37]" />
           Características
         </h2>
-        <div className="grid grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
           {stats.map(({ label, value, icon: Icon, color }) => (
             <div key={label} className="rounded-xl bg-muted/50 p-3 border border-border/50">
               <Icon className={`w-4 h-4 ${color} mb-1.5`} />
@@ -128,13 +128,13 @@ export default async function JugadorDetallePage({
           ))}
         </div>
         {jugador.equipo_favorito && (
-          <div className="mt-3 rounded-xl bg-muted/50 p-3.5 border border-border/50 flex items-center gap-3">
+          <div className="mt-3 rounded-xl bg-muted/50 p-3.5 border border-border/50 flex items-center gap-3 overflow-hidden">
             {jugador.escudo_equipo_url && (
-              <img src={jugador.escudo_equipo_url} alt="Escudo" className="w-8 h-8 object-contain" />
+              <img src={jugador.escudo_equipo_url} alt="Escudo" className="w-8 h-8 object-contain shrink-0" />
             )}
-            <div>
+            <div className="min-w-0">
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Equipo Favorito</p>
-              <p className="font-semibold text-foreground text-sm">{jugador.equipo_favorito}</p>
+              <p className="font-semibold text-foreground text-sm truncate">{jugador.equipo_favorito}</p>
             </div>
           </div>
         )}
@@ -156,21 +156,21 @@ export default async function JugadorDetallePage({
               <Trophy className="w-4 h-4 text-[#d4af37]" />
               Estadísticas
             </h2>
-            <div className="grid grid-cols-4 gap-2.5">
-              <div className="rounded-xl bg-muted/50 border border-border/50 p-3 text-center">
-                <p className="text-2xl font-black text-foreground">{ranking.partidos_jugados}</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="rounded-xl bg-muted/50 border border-border/50 p-2 sm:p-3 text-center">
+                <p className="text-xl sm:text-2xl font-black text-foreground">{ranking.partidos_jugados}</p>
                 <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mt-0.5">PJ</p>
               </div>
-              <div className="rounded-xl bg-muted/50 border border-border/50 p-3 text-center">
-                <p className="text-2xl font-black text-emerald-400">{ranking.total_goles}</p>
+              <div className="rounded-xl bg-muted/50 border border-border/50 p-2 sm:p-3 text-center">
+                <p className="text-xl sm:text-2xl font-black text-emerald-400">{ranking.total_goles}</p>
                 <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mt-0.5">Goles</p>
               </div>
-              <div className="rounded-xl bg-muted/50 border border-border/50 p-3 text-center">
-                <p className="text-2xl font-black text-blue-400">{ranking.partidos_ganados}</p>
+              <div className="rounded-xl bg-muted/50 border border-border/50 p-2 sm:p-3 text-center">
+                <p className="text-xl sm:text-2xl font-black text-blue-400">{ranking.partidos_ganados}</p>
                 <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mt-0.5">PG</p>
               </div>
-              <div className="rounded-xl bg-muted/50 border border-border/50 p-3 text-center">
-                <p className="text-2xl font-black text-red-400">{ranking.partidos_perdidos}</p>
+              <div className="rounded-xl bg-muted/50 border border-border/50 p-2 sm:p-3 text-center">
+                <p className="text-xl sm:text-2xl font-black text-red-400">{ranking.partidos_perdidos}</p>
                 <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mt-0.5">PP</p>
               </div>
             </div>

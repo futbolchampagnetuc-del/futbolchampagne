@@ -72,7 +72,7 @@ export function ComentariosPartido({ partidoId, comentariosIniciales, estadoPart
   };
 
   return (
-    <div className="card-dark rounded-2xl overflow-hidden flex flex-col max-h-[500px]">
+    <div className="card-dark rounded-2xl overflow-hidden flex flex-col max-h-[50vh] sm:max-h-[500px]">
       <div className="bg-gradient-to-r from-[#d4af37]/20 to-[#b8860b]/10 px-4 py-3 flex items-center gap-2 border-b border-border">
         <MessageSquare className="h-5 w-5 text-[#d4af37]" />
         <h3 className="font-bold text-foreground text-sm uppercase tracking-wider">La Tribuna</h3>
@@ -93,7 +93,7 @@ export function ComentariosPartido({ partidoId, comentariosIniciales, estadoPart
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xs font-bold text-foreground truncate">
+                  <span className="text-xs font-bold text-foreground break-words">
                     {c.autor_nombre}
                   </span>
                   <span className="text-[10px] text-muted-foreground">

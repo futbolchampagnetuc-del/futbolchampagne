@@ -117,8 +117,8 @@ export default async function PartidosPage() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-bold text-foreground truncate">{formatDateTime(p.fecha_hora)}</p>
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                    <p className="font-bold text-foreground text-sm sm:text-base break-words">{new Date(p.fecha_hora).toLocaleDateString("es-AR")}</p>
                     <span className={cn(
                       "text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider shrink-0",
                       isFinalizado
@@ -128,10 +128,12 @@ export default async function PartidosPage() {
                       {isFinalizado ? "Finalizado" : "Pendiente"}
                     </span>
                   </div>
-                  <p className="text-sm text-muted-foreground truncate mt-0.5">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
                     {p.cancha?.nombre || "Sin cancha"}
-                    {p.cancha?.direccion ? ` · ${p.cancha.direccion}` : ""}
                   </p>
+                  {p.cancha?.direccion && (
+                    <p className="text-xs text-muted-foreground/70 mt-0.5 break-words">{p.cancha.direccion}</p>
+                  )}
                   {stats && (
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {stats.confirmados}/{stats.total} jugadores

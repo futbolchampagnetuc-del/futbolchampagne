@@ -186,17 +186,17 @@ export default async function HomePage() {
                     </div>
 
                     {/* Marcador */}
-                    <div className="flex items-center justify-center gap-6 py-4">
-                      <div className="flex-1 text-right">
-                        <p className="text-lg font-bold text-blue-400 truncate">{ultimoPartido.equipo_a_nombre || "Equipo A"}</p>
+                    <div className="flex items-center justify-center gap-3 sm:gap-6 py-3 sm:py-4">
+                      <div className="flex-1 text-right min-w-0">
+                        <p className="text-sm sm:text-lg font-bold text-blue-400 break-words">{ultimoPartido.equipo_a_nombre || "Equipo A"}</p>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-5xl font-black text-foreground">{ultimoPartido.equipo_a_goles ?? 0}</span>
-                        <span className="text-xl font-bold text-muted-foreground">:</span>
-                        <span className="text-5xl font-black text-foreground">{ultimoPartido.equipo_b_goles ?? 0}</span>
+                      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                        <span className="text-4xl sm:text-5xl font-black text-foreground">{ultimoPartido.equipo_a_goles ?? 0}</span>
+                        <span className="text-lg sm:text-xl font-bold text-muted-foreground">:</span>
+                        <span className="text-4xl sm:text-5xl font-black text-foreground">{ultimoPartido.equipo_b_goles ?? 0}</span>
                       </div>
-                      <div className="flex-1 text-left">
-                        <p className="text-lg font-bold text-red-400 truncate">{ultimoPartido.equipo_b_nombre || "Equipo B"}</p>
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="text-sm sm:text-lg font-bold text-red-400 break-words">{ultimoPartido.equipo_b_nombre || "Equipo B"}</p>
                       </div>
                     </div>
 

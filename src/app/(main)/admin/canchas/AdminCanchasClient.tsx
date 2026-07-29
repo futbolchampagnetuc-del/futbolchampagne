@@ -167,33 +167,33 @@ export function AdminCanchasClient({ canchas }: { canchas: any[] }) {
         ) : (
           <div className="grid grid-cols-1 gap-4">
             {canchas.map((c) => (
-              <div key={c.id} className="card-premium p-4 flex items-center justify-between group">
-                <div className="flex flex-col">
-                  <span className="font-bold text-[#1a1a2e] text-lg">{c.nombre}</span>
-                  <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-2">
-                    <span className="text-sm text-[#6b7280] flex items-center">
-                      <MapPin className="w-3.5 h-3.5 mr-1.5 text-[#d4af37]" /> {c.direccion}
+              <div key={c.id} className="card-premium p-4 flex items-center justify-between group overflow-hidden">
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="font-bold text-[#1a1a2e] text-base sm:text-lg truncate">{c.nombre}</span>
+                  <div className="flex flex-col gap-1 mt-2">
+                    <span className="text-xs sm:text-sm text-[#6b7280] flex items-center truncate">
+                      <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1 sm:mr-1.5 text-[#d4af37] shrink-0" /> <span className="truncate">{c.direccion}</span>
                     </span>
                     {c.telefono_contacto && (
-                      <span className="text-sm text-[#6b7280] flex items-center">
-                        <Phone className="w-3.5 h-3.5 mr-1.5 text-[#d4af37]" /> {c.telefono_contacto}
+                      <span className="text-xs sm:text-sm text-[#6b7280] flex items-center truncate">
+                        <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1 sm:mr-1.5 text-[#d4af37] shrink-0" /> <span className="truncate">{c.telefono_contacto}</span>
                       </span>
                     )}
                     {c.coordenadas && (
-                      <span className="text-sm text-[#6b7280] flex items-center">
-                        <Navigation className="w-3.5 h-3.5 mr-1.5 text-[#d4af37]" /> {c.coordenadas}
+                      <span className="text-xs sm:text-sm text-[#6b7280] flex items-center truncate">
+                        <Navigation className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1 sm:mr-1.5 text-[#d4af37] shrink-0" /> <span className="truncate">{c.coordenadas}</span>
                       </span>
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-2 ml-4">
+                <div className="flex flex-row gap-1.5 sm:gap-2 ml-2 sm:ml-4 shrink-0">
                   <button 
                     onClick={() => handleEditClick(c)} 
                     disabled={loading}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f0ede6] text-[#6b7280] hover:bg-[#d4af37]/20 hover:text-[#a67c2e] transition-colors"
+                    className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg bg-[#f0ede6] text-[#6b7280] hover:bg-[#d4af37]/20 hover:text-[#a67c2e] transition-colors"
                     title="Editar cancha"
                   >
-                    <Edit2 className="w-4 h-4" />
+                    <Edit2 className="w-3 h-3 sm:w-4 sm:h-4" />
                   </button>
                   <button 
                     onClick={() => handleDelete(c.id)} 

@@ -22,7 +22,7 @@ export default function MainLayout({
           }} />
         </div>
 
-        <main className="relative has-bottom-nav px-5 pb-4 pt-6 animate-fade-in">
+        <main className="relative has-bottom-nav px-4 sm:px-5 pb-4 pt-5 sm:pt-6 animate-fade-in">
           {children}
         </main>
 

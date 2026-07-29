@@ -35,13 +35,13 @@ export function HabilidadesRadar({ habilidades }: HabilidadesRadarProps) {
   ];
 
   return (
-    <div className="w-full h-[400px]">
+    <div className="w-full h-[300px] sm:h-[400px]">
       <ResponsiveContainer width="100%" height="100%">
-        <RadarChart cx="50%" cy="50%" outerRadius="65%" data={data}>
+        <RadarChart cx="50%" cy="50%" outerRadius="60%" data={data}>
           <PolarGrid stroke="var(--border)" />
           <PolarAngleAxis 
             dataKey="subject" 
-            tick={{ fill: "var(--muted-foreground)", fontSize: 10 }} 
+            tick={{ fill: "var(--muted-foreground)", fontSize: 9 }} 
           />
           <PolarRadiusAxis angle={90} domain={[0, 5]} tick={false} axisLine={false} />
           <Radar

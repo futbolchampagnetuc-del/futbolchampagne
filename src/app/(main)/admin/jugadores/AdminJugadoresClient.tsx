@@ -214,17 +214,17 @@ export function AdminJugadoresClient({ jugadores }: AdminJugadoresClientProps) {
             <div className="space-y-4">
               <InputField label="Nombre completo" name="nombre_completo" value={formData.nombre_completo} onChange={handleChange} required />
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <InputField label="Email" name="email" type="email" value={formData.email} onChange={handleChange} />
                 <InputField label="Dorsal" name="numero_dorsal" type="number" value={formData.numero_dorsal} onChange={handleChange} />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <InputField label="Fecha de Nacimiento" name="fecha_nacimiento" type="date" value={formData.fecha_nacimiento} onChange={handleChange} />
                 <InputField label="Talle Camiseta" name="talle_camiseta" value={formData.talle_camiseta} onChange={handleChange} placeholder="Ej: L" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <InputField label="Altura (cm)" name="altura" type="number" value={formData.altura} onChange={handleChange} />
                 <InputField label="Peso (kg)" name="peso" type="number" step="0.1" value={formData.peso} onChange={handleChange} />
               </div>
