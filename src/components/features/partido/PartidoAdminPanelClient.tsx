@@ -49,18 +49,18 @@ export function PartidoAdminPanelClient({
   return (
     <div className="card-premium border-[#d4af37]/30 shadow-lg mb-6 p-5">
       <div className="mb-4">
-        <h2 className="text-[#1a1a2e] text-lg font-bold flex items-center gap-2">
+        <h2 className="text-foreground text-lg font-bold flex items-center gap-2">
           <Settings2 className="w-5 h-5 text-[#d4af37]" />
           Administrar Partido
         </h2>
-        <p className="text-sm text-[#6b7280]">
+        <p className="text-sm text-muted-foreground">
           Cambiá el estado del partido y el resultado final
         </p>
       </div>
       
       <div className="space-y-4">
         <div className="space-y-1">
-          <label className="text-sm font-medium text-[#1a1a2e]">Estado del Partido</label>
+          <label className="text-sm font-medium text-foreground">Estado del Partido</label>
           <select 
             className="input-premium w-full"
             value={estado} 
@@ -74,9 +74,9 @@ export function PartidoAdminPanelClient({
         </div>
 
         {(estado === "finalizado" || estado === "jugando") && (
-          <div className="grid grid-cols-2 gap-4 bg-[#faf8f5] p-4 rounded-xl border border-[#e5e0d8]/50">
+          <div className="grid grid-cols-2 gap-4 bg-muted/50 p-4 rounded-xl border border-border/50">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#6b7280]">{equipoANombre}</label>
+              <label className="text-xs font-semibold text-muted-foreground">{equipoANombre}</label>
               <input
                 type="number"
                 min="0"
@@ -87,7 +87,7 @@ export function PartidoAdminPanelClient({
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#6b7280]">{equipoBNombre}</label>
+              <label className="text-xs font-semibold text-muted-foreground">{equipoBNombre}</label>
               <input
                 type="number"
                 min="0"

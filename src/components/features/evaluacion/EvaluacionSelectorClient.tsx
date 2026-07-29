@@ -37,8 +37,8 @@ export function EvaluacionSelectorClient({
           <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#d4af37]/20 to-[#b8860b]/10 text-3xl">
             🤔
           </div>
-          <h2 className="text-xl font-bold text-[#1a1a2e] mb-2">¿Quién está votando?</h2>
-          <p className="text-sm text-[#6b7280] mb-6">
+          <h2 className="text-xl font-bold text-foreground mb-2">¿Quién está votando?</h2>
+          <p className="text-sm text-muted-foreground mb-6">
             Seleccioná tu nombre en la lista para empezar a evaluar a los demás jugadores.
           </p>
 
@@ -47,7 +47,7 @@ export function EvaluacionSelectorClient({
               <button
                 key={j.id}
                 onClick={() => setEvaluadorId(j.id)}
-                className="flex items-center p-3 rounded-xl border border-[#e5e0d8] hover:border-[#d4af37] hover:bg-[#faf8f5] transition-all"
+                className="flex items-center p-3 rounded-xl border border-border hover:border-[#d4af37] hover:bg-accent transition-all"
               >
                 <AvatarWithName name={j.nombre_completo} fotoUrl={j.foto_url} size="sm" />
               </button>

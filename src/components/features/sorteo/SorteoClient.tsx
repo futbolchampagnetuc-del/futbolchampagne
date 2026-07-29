@@ -175,14 +175,14 @@ export function SorteoClient({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={cn(
-            "rounded-lg bg-white/90 backdrop-blur-sm px-3 py-2 border mb-2 select-none",
+            "rounded-lg bg-card/90 backdrop-blur-sm px-3 py-2 border mb-2 select-none",
             snapshot.isDragging ? "shadow-lg scale-105 z-50 border-blue-400" : `border-[${colorPrefix}]/10 shadow-sm`
           )}
           style={{ ...provided.draggableProps.style }}
         >
           <div className="flex items-center justify-between">
             <AvatarWithName name={jugador.nombre_completo} fotoUrl={jugador.foto_url} size="sm" />
-            <div className="flex gap-2 text-[10px] text-gray-500 font-medium bg-gray-50 px-2 py-1 rounded-md">
+            <div className="flex gap-2 text-[10px] text-muted-foreground font-medium bg-muted px-2 py-1 rounded-md">
               {jugador.globalRating > 0 && <span title="Habilidad">⭐ {jugador.globalRating.toFixed(1)}</span>}
               {jugador.altura && <span title="Altura">📏 {jugador.altura}cm</span>}
             </div>
@@ -195,24 +195,24 @@ export function SorteoClient({
   return (
     <div className="space-y-5 animate-fade-in">
       <div className="card-premium p-1">
-        <div className="flex rounded-xl bg-[#f0ede6] p-1 flex-wrap md:flex-nowrap">
+        <div className="flex rounded-xl bg-muted p-1 flex-wrap md:flex-nowrap">
           <button
             onClick={() => setMode("random")}
-            className={cn("flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all", mode === "random" ? "bg-white text-[#1a1a2e] shadow-sm" : "text-[#6b7280]")}
+            className={cn("flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all", mode === "random" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}
           >
-            🎲 Automático (Random)
+            🎲 Random
           </button>
           <button
             onClick={() => setMode("balanceado")}
-            className={cn("flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all", mode === "balanceado" ? "bg-white text-[#1a1a2e] shadow-sm" : "text-[#6b7280]")}
+            className={cn("flex-1 rounded-lg px-3 sm:px-4 py-2.5 text-[11px] sm:text-sm font-semibold transition-all", mode === "balanceado" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}
           >
-            ⚖️ Automático (Stats)
+            ⚖️ Balanceado
           </button>
           <button
             onClick={() => setMode("manual")}
-            className={cn("flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all", mode === "manual" ? "bg-white text-[#1a1a2e] shadow-sm" : "text-[#6b7280]")}
+            className={cn("flex-1 rounded-lg px-3 sm:px-4 py-2.5 text-[11px] sm:text-sm font-semibold transition-all", mode === "manual" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}
           >
-            🖐️ Manual (Drag & Drop)
+            🖐️ Manual
           </button>
         </div>
       </div>
@@ -240,7 +240,7 @@ export function SorteoClient({
           <div className="space-y-4">
             {sinEquipo.length > 0 && (
               <div className="card-premium p-4 border border-dashed border-[#d4af37]/50">
-                <h3 className="font-semibold text-center mb-3 text-[#6b7280]">Disponibles ({sinEquipo.length})</h3>
+                <h3 className="font-semibold text-center mb-3 text-muted-foreground">Disponibles ({sinEquipo.length})</h3>
                 <Droppable droppableId="sinEquipo">
                   {(provided, snapshot) => (
                     <div 
@@ -262,10 +262,10 @@ export function SorteoClient({
                 <div className="bg-gradient-to-r from-[#d4af37]/20 to-[#b8860b]/10 px-4 py-3">
                   <h3 className="text-center font-bold text-[#a67c2e]">🇦 Equipo A ({equipoA.length})</h3>
                   {statsA && (
-                    <div className="flex justify-center gap-3 mt-2 text-[11px] font-medium text-[#8c6722] bg-white/40 px-2 py-1 rounded-md">
-                      <span>⭐ {statsA.rating}</span> |
-                      <span>📏 {statsA.altura}cm</span> |
-                      <span>⚖️ {statsA.peso}kg</span> |
+                    <div className="flex justify-center gap-3 mt-2 text-[11px] font-medium text-[#d4af37] bg-card/60 px-2 py-1 rounded-md">
+                      <span>⭐ {statsA.rating}</span>
+                      <span>📏 {statsA.altura}cm</span>
+                      <span>⚖️ {statsA.peso}kg</span>
                       <span>🎂 {statsA.edad}</span>
                     </div>
                   )}
@@ -275,7 +275,7 @@ export function SorteoClient({
                     <div 
                       ref={provided.innerRef} 
                       {...provided.droppableProps}
-                      className={cn("p-3 flex-1 min-h-[150px] transition-colors", snapshot.isDraggingOver ? "bg-[#d4af37]/10" : "bg-[#faf8f5]")}
+                      className={cn("p-3 flex-1 min-h-[150px] transition-colors", snapshot.isDraggingOver ? "bg-[#d4af37]/10" : "bg-muted/30")}
                     >
                       {equipoA.map((j, i) => renderDraggableItem(j, i, "#d4af37"))}
                       {provided.placeholder}
@@ -289,10 +289,10 @@ export function SorteoClient({
                 <div className="bg-gradient-to-r from-[#0d9488]/10 to-[#0f766e]/10 px-4 py-3">
                   <h3 className="text-center font-bold text-[#0d9488]">🇧 Equipo B ({equipoB.length})</h3>
                   {statsB && (
-                    <div className="flex justify-center gap-3 mt-2 text-[11px] font-medium text-[#0d9488] bg-white/50 px-2 py-1 rounded-md">
-                      <span>⭐ {statsB.rating}</span> |
-                      <span>📏 {statsB.altura}cm</span> |
-                      <span>⚖️ {statsB.peso}kg</span> |
+                    <div className="flex justify-center gap-3 mt-2 text-[11px] font-medium text-emerald-400 bg-card/60 px-2 py-1 rounded-md">
+                      <span>⭐ {statsB.rating}</span>
+                      <span>📏 {statsB.altura}cm</span>
+                      <span>⚖️ {statsB.peso}kg</span>
                       <span>🎂 {statsB.edad}</span>
                     </div>
                   )}
@@ -302,7 +302,7 @@ export function SorteoClient({
                     <div 
                       ref={provided.innerRef} 
                       {...provided.droppableProps}
-                      className={cn("p-3 flex-1 min-h-[150px] transition-colors", snapshot.isDraggingOver ? "bg-[#0d9488]/10" : "bg-[#f0fdfa]/50")}
+                      className={cn("p-3 flex-1 min-h-[150px] transition-colors", snapshot.isDraggingOver ? "bg-[#0d9488]/10" : "bg-muted/20")}
                     >
                       {equipoB.map((j, i) => renderDraggableItem(j, i, "#0d9488"))}
                       {provided.placeholder}
@@ -324,9 +324,9 @@ export function SorteoClient({
               {/* Vista Sólo Lectura de Equipos para Automático */}
               <div className="card-gold overflow-hidden">
                 <div className="bg-gradient-to-r from-[#d4af37]/20 to-[#b8860b]/10 px-4 py-3">
-                  <h3 className="text-center font-bold text-[#a67c2e]">🇦 Equipo A ({equipoA.length})</h3>
-                  {statsA && (
-                    <div className="flex justify-center gap-3 mt-2 text-[11px] font-medium text-[#8c6722] bg-white/40 px-2 py-1 rounded-md">
+                    <h3 className="text-center font-bold text-[#d4af37]">🇦 Equipo A ({equipoA.length})</h3>
+                    {statsA && (
+                      <div className="flex justify-center gap-3 mt-2 text-[11px] font-medium text-[#d4af37] bg-card/60 px-2 py-1 rounded-md">
                       <span>⭐ {statsA.rating}</span> |
                       <span>📏 {statsA.altura}cm</span>
                     </div>
@@ -334,7 +334,7 @@ export function SorteoClient({
                 </div>
                 <div className="p-3 space-y-1.5">
                   {equipoA.map((j) => (
-                    <div key={j.id} className="rounded-lg bg-white/80 backdrop-blur-sm px-3 py-2 border border-[#d4af37]/10 flex justify-between items-center">
+                    <div key={j.id} className="rounded-lg bg-card/80 backdrop-blur-sm px-3 py-2 border border-[#d4af37]/10 flex justify-between items-center">
                       <AvatarWithName name={j.nombre_completo} fotoUrl={j.foto_url} size="sm" />
                     </div>
                   ))}
@@ -343,9 +343,9 @@ export function SorteoClient({
 
               <div className="card-premium overflow-hidden border-[#0d9488]/30">
                 <div className="bg-gradient-to-r from-[#0d9488]/10 to-[#0f766e]/10 px-4 py-3">
-                  <h3 className="text-center font-bold text-[#0d9488]">🇧 Equipo B ({equipoB.length})</h3>
-                  {statsB && (
-                    <div className="flex justify-center gap-3 mt-2 text-[11px] font-medium text-[#0d9488] bg-white/50 px-2 py-1 rounded-md">
+                    <h3 className="text-center font-bold text-emerald-400">🇧 Equipo B ({equipoB.length})</h3>
+                    {statsB && (
+                      <div className="flex justify-center gap-3 mt-2 text-[11px] font-medium text-emerald-400 bg-card/60 px-2 py-1 rounded-md">
                       <span>⭐ {statsB.rating}</span> |
                       <span>📏 {statsB.altura}cm</span>
                     </div>
@@ -353,7 +353,7 @@ export function SorteoClient({
                 </div>
                 <div className="p-3 space-y-1.5">
                   {equipoB.map((j) => (
-                    <div key={j.id} className="rounded-lg bg-white/80 backdrop-blur-sm px-3 py-2 border border-[#0d9488]/10 flex justify-between items-center">
+                    <div key={j.id} className="rounded-lg bg-card/80 backdrop-blur-sm px-3 py-2 border border-[#0d9488]/10 flex justify-between items-center">
                       <AvatarWithName name={j.nombre_completo} fotoUrl={j.foto_url} size="sm" />
                     </div>
                   ))}

@@ -160,6 +160,31 @@
 .animate-flicker { animation: flicker 3s ease-in-out infinite; }
 .animate-gradient { background-size: 200% 200%; animation: gradient-shift 4s ease infinite; }
 
+.input-premium {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--background);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  transition: all 0.2s;
+}
+.input-premium:focus {
+  outline: none;
+  border-color: var(--primary);
+  ring: 2px solid var(--ring);
+}
+.input-premium::placeholder {
+  color: var(--muted-foreground);
+}
+.card-gold {
+  background: var(--card);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
 .card-premium {
   background: var(--card);
   border: 1px solid var(--border);

@@ -8,12 +8,12 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#faf8f5] px-6 text-center">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6 text-center">
       <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#d4af37]/20 to-[#b8860b]/10">
         <span className="text-4xl">😵</span>
       </div>
-      <h1 className="text-2xl font-extrabold text-[#1a1a2e]">Algo salió mal</h1>
-      <p className="mt-2 text-[#6b7280] max-w-sm">
+      <h1 className="text-2xl font-extrabold text-foreground">Algo salió mal</h1>
+      <p className="mt-2 text-muted-foreground max-w-sm">
         {error.message || "Error inesperado"}
       </p>
       <button

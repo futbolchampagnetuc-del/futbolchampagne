@@ -90,7 +90,7 @@ export default async function JugadorDetallePage({
             </div>
           )}
           {jugador.numero_dorsal && (
-            <span className="absolute -bottom-1 right-1/2 translate-x-20 flex h-8 min-w-[32px] items-center justify-center rounded-full bg-[#d4af37] px-2.5 text-sm font-bold text-black shadow-lg ring-2 ring-background">
+            <span className="absolute -bottom-1 -right-2 flex h-8 min-w-[32px] items-center justify-center rounded-full bg-[#d4af37] px-2.5 text-sm font-bold text-black shadow-lg ring-2 ring-background">
               #{jugador.numero_dorsal}
             </span>
           )}

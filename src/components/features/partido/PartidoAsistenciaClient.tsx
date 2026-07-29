@@ -44,7 +44,7 @@ export function PartidoAsistenciaClient({ partidoId, jugadores, asistencias }: P
 
   return (
     <div className="card-premium p-5 animate-slide-up space-y-4">
-      <h3 className="text-lg font-bold text-[#1a1a2e] flex items-center gap-2">
+      <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
         <span className="text-xl">📋</span>
         Gestionar Asistencia
       </h3>
@@ -81,25 +81,25 @@ export function PartidoAsistenciaClient({ partidoId, jugadores, asistencias }: P
       </div>
 
       {asistencias.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-[#e5e0d8]">
-          <p className="text-sm font-semibold text-[#6b7280] mb-3 uppercase tracking-wider">
+        <div className="mt-4 pt-4 border-t border-border">
+          <p className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">
             Jugadores Anotados ({asistencias.length})
           </p>
           <div className="space-y-2">
             {asistencias.map((a) => {
               const j = jugadores.find(x => x.id === a.jugador_id);
               return (
-                <div key={a.id} className="flex items-center justify-between bg-[#faf8f5] px-3 py-2 rounded-lg text-sm border border-[#e5e0d8]/50">
+                <div key={a.id} className="flex items-center justify-between bg-muted/50 px-3 py-2 rounded-lg text-sm border border-border/50">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-[#1a1a2e]">{j?.nombre_completo}</span>
+                    <span className="font-medium text-foreground">{j?.nombre_completo}</span>
                     <span className={`text-[0.65rem] uppercase font-bold px-2 py-0.5 rounded-full ${
-                      a.estado === 'asisto' ? 'bg-green-100 text-green-700' :
-                      a.estado === 'no asisto' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
+                      a.estado === 'asisto' ? 'bg-emerald-500/10 text-emerald-400' :
+                      a.estado === 'no asisto' ? 'bg-red-500/10 text-red-400' : 'bg-yellow-500/10 text-yellow-400'
                     }`}>
                       {a.estado}
                     </span>
                   </div>
-                  <button onClick={() => handleEliminar(a.jugador_id)} disabled={loading} className="text-[#6b7280] hover:text-red-500 font-bold transition-colors">
+                  <button onClick={() => handleEliminar(a.jugador_id)} disabled={loading} className="text-muted-foreground hover:text-red-400 font-bold transition-colors">
                     ✕
                   </button>
                 </div>

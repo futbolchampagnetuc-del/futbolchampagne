@@ -59,7 +59,7 @@ export function PartidoGolesClient({
 
   return (
     <div className="card-premium p-5 animate-slide-up">
-      <h3 className="mb-4 text-lg font-bold text-[#1a1a2e] flex items-center gap-2">
+      <h3 className="mb-4 text-lg font-bold text-foreground flex items-center gap-2">
         <span className="text-xl">⚽</span>
         Registrar Goles
       </h3>
@@ -86,16 +86,16 @@ export function PartidoGolesClient({
             <button
               type="button"
               onClick={() => setCantidad(Math.max(0, cantidad - 1))}
-              className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f0ede6] text-2xl font-bold text-[#6b7280] transition-all active:scale-90 hover:bg-[#e5e0d8]"
+              className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted text-2xl font-bold text-muted-foreground transition-all active:scale-90 hover:bg-muted/80"
             >
               −
             </button>
 
             <div className="flex flex-col items-center">
-              <span className="text-5xl font-extrabold text-[#1a1a2e]">
+              <span className="text-5xl font-extrabold text-foreground">
                 {cantidad}
               </span>
-              <span className="text-xs text-[#6b7280] mt-1">goles</span>
+              <span className="text-xs text-muted-foreground mt-1">goles</span>
             </div>
 
             <button
@@ -128,8 +128,8 @@ export function PartidoGolesClient({
 
       {/* Tabla de goleadores del partido */}
       {golesExistentes.length > 0 && (
-        <div className="mt-6 pt-4 border-t border-[#e5e0d8]">
-          <p className="mb-3 text-sm font-semibold text-[#6b7280] uppercase tracking-wide">
+        <div className="mt-6 pt-4 border-t border-border">
+          <p className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wide">
             Goles del partido
           </p>
           <div className="space-y-1.5">
@@ -138,9 +138,9 @@ export function PartidoGolesClient({
               .map((g) => (
                 <div
                   key={g.id}
-                  className="flex items-center justify-between rounded-xl bg-[#f0ede6]/50 px-4 py-2.5 text-sm"
+                  className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-2.5 text-sm"
                 >
-                  <span className="font-medium text-[#1a1a2e]">
+                  <span className="font-medium text-foreground">
                     {g.jugador.nombre_completo}
                   </span>
                   <span className="font-extrabold text-[#c9952a] text-base">

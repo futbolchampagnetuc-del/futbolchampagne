@@ -109,8 +109,8 @@ export function EvaluacionForm({
             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
           </svg>
         </div>
-        <h2 className="text-xl font-bold text-[#1a1a2e]">¡Evaluaciones guardadas!</h2>
-        <p className="mt-2 text-center text-[#6b7280]">
+        <h2 className="text-xl font-bold text-foreground">¡Evaluaciones guardadas!</h2>
+        <p className="mt-2 text-center text-muted-foreground">
           Has registrado los rendimientos exitosamente.
         </p>
       </div>
@@ -127,8 +127,8 @@ export function EvaluacionForm({
           <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#d4af37]/20 to-[#b8860b]/10 text-3xl">
             📋
           </div>
-          <h2 className="text-xl font-bold text-[#1a1a2e] mb-2">Resumen de Votación</h2>
-          <p className="text-[#6b7280] mb-6">
+          <h2 className="text-xl font-bold text-foreground mb-2">Resumen de Votación</h2>
+          <p className="text-muted-foreground mb-6">
             Vas a enviar {totalVotados} evaluaciones.
           </p>
           
@@ -147,7 +147,7 @@ export function EvaluacionForm({
             <button
               onClick={() => setCurrentIndex(0)}
               disabled={saving}
-              className="px-4 py-2 text-sm font-semibold text-[#6b7280] hover:text-[#1a1a2e]"
+              className="px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
             >
               Volver a revisar
             </button>
@@ -161,7 +161,7 @@ export function EvaluacionForm({
   return (
     <div className="space-y-4 animate-fade-in">
       <div className="flex items-center justify-between px-2">
-        <span className="text-sm font-semibold text-[#6b7280]">
+        <span className="text-sm font-semibold text-muted-foreground">
           Jugador {currentIndex + 1} de {jugadores.length}
         </span>
         <div className="flex gap-1">
@@ -171,7 +171,7 @@ export function EvaluacionForm({
               className={cn(
                 "h-1.5 rounded-full transition-all duration-300",
                 i === currentIndex ? "w-4 bg-[#d4af37]" : 
-                i < currentIndex ? "w-1.5 bg-[#d4af37]/40" : "w-1.5 bg-gray-200"
+                i < currentIndex ? "w-1.5 bg-[#d4af37]/40" : "w-1.5 bg-muted-foreground/20"
               )}
             />
           ))}
@@ -207,11 +207,11 @@ export function EvaluacionForm({
           </div>
         </div>
         
-        <div className="mt-8 flex gap-3 pt-4 border-t border-gray-100">
+        <div className="mt-8 flex gap-3 pt-4 border-t border-border">
           <button
             onClick={handleBack}
             disabled={currentIndex === 0}
-            className="px-4 py-3 rounded-xl border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 disabled:opacity-30 transition-all"
+            className="px-4 py-3 rounded-xl border border-border text-muted-foreground font-semibold hover:bg-accent disabled:opacity-30 transition-all"
           >
             Atrás
           </button>

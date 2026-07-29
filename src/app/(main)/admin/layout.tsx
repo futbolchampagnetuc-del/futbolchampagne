@@ -4,7 +4,12 @@ import { useState } from "react";
 import { Lock } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("admin-auth") === "true";
+    }
+    return false;
+  });
   const [usuario, setUsuario] = useState("");
   const [clave, setClave] = useState("");
   const [error, setError] = useState(false);
@@ -15,10 +20,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="card-premium w-full max-w-sm p-6">
           <div className="flex justify-center mb-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#d4af37]/10">
-              <Lock className="h-6 w-6 text-[#c9952a]" />
+              <Lock className="h-6 w-6 text-[#d4af37]" />
             </div>
           </div>
-          <h2 className="text-xl font-bold text-center text-[#1a1a2e] mb-6">
+          <h2 className="text-xl font-bold text-center text-foreground mb-6">
             Acceso Administrador
           </h2>
           
@@ -27,6 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               e.preventDefault();
               if (usuario === "admin" && clave === "123456") {
                 setIsAuthenticated(true);
+                localStorage.setItem("admin-auth", "true");
                 setError(false);
               } else {
                 setError(true);
@@ -35,24 +41,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="space-y-4"
           >
             <div>
-              <label className="text-sm font-medium text-[#1a1a2e] mb-1 block">
+              <label className="text-sm font-medium text-foreground mb-1 block">
                 Usuario
               </label>
               <input
                 type="text"
-                className="input-premium w-full"
+                className="input-premium"
                 value={usuario}
                 onChange={(e) => setUsuario(e.target.value)}
                 placeholder="Ej: admin"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-[#1a1a2e] mb-1 block">
+              <label className="text-sm font-medium text-foreground mb-1 block">
                 Contraseña
               </label>
               <input
                 type="password"
-                className="input-premium w-full"
+                className="input-premium"
                 value={clave}
                 onChange={(e) => setClave(e.target.value)}
                 placeholder="******"
@@ -60,12 +66,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             
             {error && (
-              <p className="text-red-500 text-sm text-center">
+              <p className="text-destructive text-sm text-center">
                 Credenciales incorrectas.
               </p>
             )}
 
-            <button type="submit" className="btn-primary w-full py-2.5 mt-2">
+            <button type="submit" className="btn-primary w-full py-3 mt-2 text-sm font-bold">
               Ingresar
             </button>
           </form>

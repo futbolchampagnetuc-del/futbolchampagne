@@ -35,10 +35,10 @@ export default async function AdminJugadoresPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[#1a1a2e]">
+          <h1 className="text-2xl font-black tracking-tight text-foreground">
             Administrar Jugadores
           </h1>
-          <p className="mt-1 text-sm text-[#6b7280]">
+          <p className="mt-1 text-sm text-muted-foreground">
             {jugadores.length} jugadores registrados
           </p>
         </div>

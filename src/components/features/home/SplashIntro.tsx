@@ -86,7 +86,7 @@ export function SplashIntro({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       )}
-      <div className={exiting ? "" : ""}>
+      <div className={exiting ? "animate-fade-in" : ""}>
         {children}
       </div>
     </>

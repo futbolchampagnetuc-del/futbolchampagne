@@ -60,7 +60,7 @@ export default async function EvaluarPage({
 
   return (
     <div className="space-y-5 animate-fade-in pb-24">
-      <Link href={`/partido/${id}`} className="inline-flex items-center gap-1.5 text-sm font-medium text-[#6b7280] hover:text-[#1a1a2e] transition-colors">
+      <Link href={`/partido/${id}`} className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
@@ -68,10 +68,10 @@ export default async function EvaluarPage({
       </Link>
 
       <div>
-        <h1 className="text-xl font-extrabold tracking-tight text-[#1a1a2e]">
+        <h1 className="text-xl font-extrabold tracking-tight text-foreground">
           Evaluar Jugadores
         </h1>
-        <p className="mt-1 text-sm text-[#6b7280]">
+        <p className="mt-1 text-sm text-muted-foreground">
           {partido.cancha?.nombre} —{" "}
           {new Date(partido.fecha_hora).toLocaleDateString("es-AR")}
         </p>
@@ -82,8 +82,8 @@ export default async function EvaluarPage({
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#d4af37]/10">
             <span className="text-2xl">👥</span>
           </div>
-          <p className="text-lg font-semibold text-[#1a1a2e]">No hay jugadores para evaluar</p>
-          <p className="mt-1 text-sm text-[#6b7280]">
+          <p className="text-lg font-semibold text-foreground">No hay jugadores para evaluar</p>
+        <p className="mt-1 text-sm text-muted-foreground">
             Los jugadores confirmados aparecerán acá
           </p>
         </div>

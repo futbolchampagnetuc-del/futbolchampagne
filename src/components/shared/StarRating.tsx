@@ -43,7 +43,7 @@ export function StarRating({
                 "transition-all duration-150",
                 filled
                   ? "text-[#d4af37] drop-shadow-sm"
-                  : "text-[#e5e0d8] hover:text-[#d4af37]/30"
+                  : "text-muted-foreground/40 hover:text-[#d4af37]/50"
               )}
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -54,7 +54,7 @@ export function StarRating({
         );
       })}
       {!readonly && value > 0 && (
-        <span className="ml-1.5 text-sm font-medium text-[#6b7280]">{value}/5</span>
+        <span className="ml-1.5 text-sm font-medium text-muted-foreground">{value}/5</span>
       )}
     </div>
   );
